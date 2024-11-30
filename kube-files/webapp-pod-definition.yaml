@@ -8,7 +8,8 @@ metadata:
 spec:
   containers:
   - name: simple-webapp-mysql
-    image: kodekloud/simple-webapp-mysql
+    image: localhost:5000/simple-app-mysql:latest
+    #imagePullPolicy:
     ports:
     - containerPort: 8080
     volumeMounts:

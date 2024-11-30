@@ -10,13 +10,15 @@ DB_Host = os.environ.get('DB_Host') or "localhost"
 DB_Database = os.environ.get('DB_Database') or "mysql"
 DB_User = os.environ.get('DB_User') or "root"
 DB_Password = os.environ.get('DB_Password') or "paswrd"
+DB_SSL_DISABLED = os.environ.get('DB_SSL_DISABLED', 'true').lower() == 'true' or False
+
 
 @app.route("/")
 def main():
     db_connect_result = False
     err_message = ""
     try:
-        mysql.connector.connect(host=DB_Host, database=DB_Database, user=DB_User, password=DB_Password)
+        mysql.connector.connect(host=DB_Host, database=DB_Database, user=DB_User, password=DB_Password, ssl_disabled=DB_SSL_DISABLED)
         color = '#39b54b'
         db_connect_result = True
     except Exception as e:
