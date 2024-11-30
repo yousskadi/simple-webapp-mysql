@@ -1,0 +1,33 @@
+#### Application Test la connection à Mysql:
+
+
+
+
+#### Alternatives pour le développement avec K3s
+
+a. Activer un registre local
+Si vous travaillez fréquemment avec des images locales, vous pouvez configurer un registre local intégré dans K3s.
+	1. Créez un registre local (Docker Registry) : Si vous n'avez pas de registre local, créez-en un avec Docker :
+
+		docker run -d -p 5000:5000 --name registry registry:2
+		
+	2. Configurez K3s pour utiliser ce registre Créez un fichier registries.yaml dans /etc/rancher/k3s :
+
+		mirrors:
+		  "localhost:5000":
+		    endpoint:
+		      - "http://localhost:5000"
+		
+	Redémarrez K3s pour prendre en compte cette configuration :
+	
+		
+		sudo systemctl restart k3s
+		
+	3. Poussez l'image dans le registre local :
+		
+		docker tag my-local-image:latest localhost:5000/my-local-image:latest
+		docker push localhost:5000/my-local-image:latest
+		
+	4. Utilisez l'image depuis le registre : Dans le manifeste du pod, utilisez le nom complet de l'image du registre local :
+		
+			image: localhost:5000/my-local-image:latest
